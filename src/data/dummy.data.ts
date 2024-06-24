@@ -1,0 +1,6 @@
+
+
+
+const DATA = {
+  name: "asim"
+}
