@@ -9,6 +9,7 @@ export class Db {
   // eslint-disable-next-line no-use-before-define
   private static instance: Db;
 
+  
   private logger: typeof Logger;
 
   public User: UserDatabase;
