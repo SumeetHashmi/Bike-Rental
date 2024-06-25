@@ -50,4 +50,26 @@ export class UserDatabase {
     const { id } = res[0];
     return id;
   }
+
+  async GetUser(where: Partial<Entities.User>, returnPassword = false): Promise<Entities.User | undefined> {
+    this.logger.info('Db.GetUser', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').where(where); ////////////
+    this.logger.info('Db.GetUser query', { query: query.toString() });
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) return undefined;
+
+    if (!res || res.length === 0) {
+      this.logger.info('No user found', res);
+      return undefined;
+    }
+
+    if (!returnPassword) delete res[0].password;
+
+    return res[0];
+  }
 }

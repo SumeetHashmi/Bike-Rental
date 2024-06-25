@@ -4,15 +4,17 @@ import { builtins } from 'pg-types';
 import { ENV } from '../helpers/env';
 import { Logger } from '../helpers/logger';
 import { UserDatabase } from './controllers/user.database';
+import { AuthDatabase } from './controllers/auth.database';
 
 export class Db {
   // eslint-disable-next-line no-use-before-define
   private static instance: Db;
 
-  
   private logger: typeof Logger;
 
   public User: UserDatabase;
+
+  public Auth: AuthDatabase;
 
   private db: Knex | undefined;
 
@@ -25,6 +27,7 @@ export class Db {
     };
 
     this.User = new UserDatabase(dbArgs);
+    this.Auth = new AuthDatabase(dbArgs);
   }
 
   public static get Instance(): Db {
