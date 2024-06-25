@@ -15,13 +15,12 @@ export class AuthService {
   }
 
   public async CreateUser(user: AuthModel.RegisterUserBody): Promise<AuthModel.Tokens> {
-    /////////
     Logger.info('AuthService.CreateUser', { user });
 
     const hashedPassword = await Hash.hashPassword(user.password);
     user.password = hashedPassword;
 
-    const fetchedUser = await this.db.User.CreateUser(user); ///////////////
+    const fetchedUser = await this.db.User.CreateUser(user);
 
     const dataForToken = { id: fetchedUser };
 
@@ -39,14 +38,14 @@ export class AuthService {
     Logger.info('AuthService.LoginUser', { user });
 
     // Check if the user exists
-    const fetchedUser = await this.db.User.GetUser({ email: user.email }, true); ////////////
+    const fetchedUser = await this.db.User.GetUser({ email: user.email }, true);
     if (!fetchedUser) {
       throw new AppError(400, 'Invalid email or password');
     }
 
     // Verify the password
     if (!fetchedUser.password) throw new AppError(400, 'User not found');
-    const isCorrectPassword = await Hash.verifyPassword(user.password, fetchedUser.password); /////////////
+    const isCorrectPassword = await Hash.verifyPassword(user.password, fetchedUser.password);
     if (!isCorrectPassword) throw new AppError(400, 'Invalid credentials');
 
     // Generate tokens
