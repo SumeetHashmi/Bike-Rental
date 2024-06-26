@@ -26,6 +26,7 @@ async function cleanUpDatabase() {
           user: ENV.Database.DB_USER,
           database: ENV.Database.DB_NAME,
           password: ENV.Database.DB_PASSWORD,
+          // ssl: { rejectUnauthorized: false },
         },
       });
 
@@ -33,7 +34,7 @@ async function cleanUpDatabase() {
         `
         DROP SCHEMA public CASCADE;
         CREATE SCHEMA public;
-        `
+        `,
       );
       Logger.debug(query.toSQL().toNative());
       await query;

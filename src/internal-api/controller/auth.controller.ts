@@ -42,7 +42,6 @@ export class AuthController {
     this.router.post('/login', async (req: RequestBody<AuthModel.LoginUser>, res: Response) => {
       let body;
       try {
-        // Validate request body
         await AuthModel.LoginUserSchema.validateAsync(req.body, {
           abortEarly: false,
         });
@@ -50,7 +49,6 @@ export class AuthController {
         const db = res.locals.db as Db;
         const service = new AuthService({ db });
 
-        // Perform login
         const response = await service.LoginUser(req.body);
 
         body = {
@@ -58,7 +56,7 @@ export class AuthController {
         };
       } catch (error) {
         genericError(error, res);
-        return; // Ensure that the response is not sent multiple times
+        return;
       }
       res.json(body);
     });
@@ -72,7 +70,6 @@ export class AuthController {
         const db = res.locals.db as Db;
         const service = new AuthService({ db });
 
-        // Generate OTP
         const otp = await service.GenerateOTP(req.body.email);
 
         body = {
@@ -80,7 +77,7 @@ export class AuthController {
         };
       } catch (error) {
         genericError(error, res);
-        return; // Ensure that the response is not sent multiple times
+        return;
       }
       res.json(body);
     });

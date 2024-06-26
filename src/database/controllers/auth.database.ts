@@ -23,15 +23,14 @@ export class AuthDatabase {
     this.RunQuery = args.RunQuery;
   }
 
-  async StoreOTP(user: Partial<Entities.OtpVerifications>): Promise<void> {
-    this.logger.info('Db.StoreOTP', { user });
+  async StoreOTP(data: Partial<Entities.OtpVerifications>): Promise<void> {
+    this.logger.info('Db.StoreOTP', { data });
 
     const knexdb = this.GetKnex();
 
-    // Here, we assume you have a separate table to store OTPs or you can store it in the users table with an expiration timestamp
-    const query = knexdb('otpVerifications').insert(user);
+    const query = knexdb('otpVerifications').insert(data);
 
-    const { res, err } = await this.RunQuery(query);
+    const { err } = await this.RunQuery(query);
 
     if (err) {
       this.logger.error('Db.StoreOTP error', err);
