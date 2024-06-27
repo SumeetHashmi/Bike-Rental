@@ -5,6 +5,7 @@ import { Logger } from '../../helpers/logger';
 import { genericError, RequestBody } from '../../helpers/utils';
 import * as AuthModel from '../../model/auth.model';
 import { AuthService } from '../services/auth.service';
+import { UserType } from '../../helpers/entities';
 
 export class AuthController {
   public router: express.Router;
@@ -24,7 +25,7 @@ export class AuthController {
         await AuthModel.RegisterUserBodySchema.validateAsync(req.body, {
           abortEarly: false,
         });
-        const userData = { ...req.body, type: 'user' };
+        const userData = { ...req.body, type: UserType.User };
         const db = res.locals.db as Db;
 
         const service = new AuthService({ db });

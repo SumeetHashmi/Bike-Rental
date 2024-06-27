@@ -5,13 +5,16 @@ import * as AuthModel from '../../model/auth.model';
 import { Entities, Hash } from '../../helpers';
 import * as Token from '../../helpers/token';
 import { generateOTP } from '../../helpers/otp';
+import { EmailService } from './email.service';
 
 export class AuthService {
   private db: Db;
+  private emailService: EmailService;
 
   constructor(args: { db: Db }) {
     Logger.info('AuthService initialized...');
     this.db = args.db;
+    this.emailService = new EmailService();
   }
 
   public async CreateUser(user: AuthModel.RegisterUserBody): Promise<AuthModel.Tokens> {
@@ -67,6 +70,7 @@ export class AuthService {
     const otp = generateOTP();
 
     await this.db.Auth.StoreOTP({ userId: fetchedUser.id, otp });
+    await this.emailService.SentCodeToUserEmail(fetchedUser.email, otp);
 
     //Will send otp to email using smtp
   }

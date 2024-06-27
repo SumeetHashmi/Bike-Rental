@@ -47,6 +47,10 @@ export const AWS = {
   BUCKET_NAME: Process.env.AWS_S3_BUCKET_NAME as string,
 };
 
+export const SMTP = {
+  BREVO_KEY: process.env.BREVO_KEY as string,
+  BREVO_URL: process.env.BREVO_URL as string,
+};
 
 export const ENV = {
   Server,
@@ -54,5 +58,5 @@ export const ENV = {
   LoggerLevel,
   Database,
   Swagger,
-  AWS
+  AWS,
 };

@@ -1,5 +1,6 @@
 import { PASSWORD_REGEX } from '../helpers/contants';
 import Joi from 'joi';
+import { UserType } from '../helpers/entities';
 
 export const joiPasswordValidation = Joi.string().required().min(8).regex(PASSWORD_REGEX);
 
@@ -22,7 +23,7 @@ export interface RegisterUserBody {
   userName: string;
   email: string;
   password: string;
-  type?: string;
+  type?: UserType;
 }
 
 export interface LoginUser {

@@ -1,9 +1,14 @@
+export enum UserType {
+  Manager = 'Manager',
+  User = 'User',
+}
+
 export interface User {
   id: string;
   userName: string;
   email: string;
   password: string;
-  type: string;
+  type: UserType;
   createdAt: string;
   updatedAt: string;
 }
@@ -49,9 +54,4 @@ export enum UserStatus {
   Active = 'Active',
   Inactive = 'Inactive',
   Blocked = 'Blocked',
-}
-
-export enum UserTypes {
-  Customer = 'Customer',
-  Admin = 'Admin',
 }

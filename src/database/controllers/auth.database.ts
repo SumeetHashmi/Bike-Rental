@@ -23,10 +23,27 @@ export class AuthDatabase {
     this.RunQuery = args.RunQuery;
   }
 
+  async DeleteRecoveryOtp(data: Partial<Entities.OtpVerifications>): Promise<void> {
+    this.logger.info('Db.DeleteRecoveryOtp', { data });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('otpVerifications').where(data).del();
+
+    const { err } = await this.RunQuery(query);
+
+    if (err) {
+      this.logger.error(' Db.DeleteRecoveryOtp Error deleting OTP', err);
+      throw new AppError(500, 'Error deleting OTP');
+    }
+  }
+
   async StoreOTP(data: Partial<Entities.OtpVerifications>): Promise<void> {
     this.logger.info('Db.StoreOTP', { data });
 
     const knexdb = this.GetKnex();
+
+    await this.DeleteRecoveryOtp(data);
 
     const query = knexdb('otpVerifications').insert(data);
 
