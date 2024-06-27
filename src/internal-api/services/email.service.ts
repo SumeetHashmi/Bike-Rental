@@ -12,8 +12,6 @@ export class EmailService {
     const BREVO_KEY = SMTP.BREVO_KEY;
     const BREVO_URL = SMTP.BREVO_URL;
 
-    Logger.info(BREVO_KEY, BREVO_URL, otp, 'ppppppppppppppppppppppppppppppp');
-
     Logger.info('EmailService.RecoverUser', { userEmail });
 
     try {

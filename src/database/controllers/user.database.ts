@@ -38,7 +38,7 @@ export class UserDatabase {
 
         throw new AppError(400, 'User already exists');
       }
-      throw new AppError(400, `User not created ${err}`);
+      throw new AppError(400, `User not created `);
     }
 
     if (!res || res.length !== 1) {
