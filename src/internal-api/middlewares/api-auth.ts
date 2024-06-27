@@ -2,14 +2,14 @@
 
 import { Request, Response, NextFunction } from 'express';
 import * as JWT from 'jsonwebtoken';
-import { UserTypes } from '../../helpers/entities';
+import { UserType } from '../../helpers/entities';
 import { Jwt } from '../../helpers/env';
 
 export const jwtAuth = (
   req: Request,
   res: Response,
   next: NextFunction,
-  userTypeToCheck: UserTypes[],
+  userTypeToCheck: UserType[],
 ): void | Response => {
   try {
     const token: string = req.headers['access-token']?.toString() || '';
@@ -21,7 +21,7 @@ export const jwtAuth = (
 
     if (!decoded.types) return res.status(400).json({ Error: true, Msg: 'User Token Is Invalid or Expired!' });
 
-    const types: UserTypes[] = JSON.parse(decoded.types);
+    const types: UserType[] = JSON.parse(decoded.types);
 
     if (types.length === 0) return res.status(400).json({ Error: true, Msg: 'User Token Is Invalid or Expired!' });
 

@@ -7,7 +7,7 @@ import { AuthController } from './auth.controller';
 import { UserController } from './user.controller';
 
 import { jwtAuth } from '../middlewares/api-auth';
-import { UserTypes } from '../../helpers/entities';
+import { UserType } from '../../helpers/entities';
 
 export class ApiController {
   public router: express.Router;
@@ -30,7 +30,7 @@ export class ApiController {
     this.router.use('/auth', new AuthController().router);
 
     this.router.use((req, res, next) => {
-      jwtAuth(req, res, next, [UserTypes.Customer]);
+      jwtAuth(req, res, next, [UserType.User]);
     });
     this.router.use('/user', new UserController().router);
     this.router.use('*', (req: express.Request, res: express.Response): express.Response => {

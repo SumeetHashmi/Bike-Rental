@@ -38,7 +38,7 @@ export class UserDatabase {
 
         throw new AppError(400, 'User already exists');
       }
-      throw new AppError(400, 'User not created');
+      throw new AppError(400, `User not created `);
     }
 
     if (!res || res.length !== 1) {
@@ -49,5 +49,24 @@ export class UserDatabase {
 
     const { id } = res[0];
     return id;
+  }
+
+  async GetUser(where: Partial<Entities.User>): Promise<Entities.User | undefined> {
+    this.logger.info('Db.GetUser', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').select('*').where(where);
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) return undefined;
+
+    if (!res || res.length === 0) {
+      this.logger.info('No user found', res);
+      return undefined;
+    }
+
+    return res[0];
   }
 }

@@ -26,6 +26,7 @@ async function migrate() {
         user: ENV.Database.DB_USER,
         database: ENV.Database.DB_NAME,
         password: ENV.Database.DB_PASSWORD,
+        ssl: { rejectUnauthorized: false },
       },
     });
 

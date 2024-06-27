@@ -4,7 +4,7 @@ import { Logger } from '../../helpers/logger';
 import { Entities, Hash } from '../../helpers';
 import * as UserModels from '../../model/auth.model';
 import * as AuthModel from '../../model/auth.model';
-import { UserTypes } from '../../helpers/entities';
+import { UserType } from '../../helpers/entities';
 import * as Token from '../../helpers/token';
 
 export class UserService {
@@ -15,10 +15,7 @@ export class UserService {
     this.db = args.db;
   }
 
-  public async GetUser(
-    where: Partial<Entities.User>,
-  ): Promise<void> {
+  public async GetUser(where: Partial<Entities.User>): Promise<void> {
     Logger.info('UserService.GetUser', { where });
-
   }
 }
