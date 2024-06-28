@@ -54,4 +54,24 @@ export class AuthDatabase {
       throw new AppError(400, 'Failed to store OTP');
     }
   }
+  async GetRecoveryOtp(where: Partial<Entities.OtpVerifications>): Promise<Entities.OtpVerifications | undefined> {
+    this.logger.info('Db.GetRecoveryOtp', where);
+
+    const knexdb = this.GetKnex();
+
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+    const query = knexdb('otpVerifications').select('*').where(where).where('createdAt', '>', fiveMinutesAgo);
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) throw new AppError(400, err);
+
+    if (!res || res.length === 0) {
+      this.logger.info(' Db.CheckRecoveryOtp No valid OTP found');
+      return undefined;
+    }
+
+    return res[0];
+  }
 }

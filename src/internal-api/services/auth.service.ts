@@ -71,7 +71,15 @@ export class AuthService {
 
     await this.db.Auth.StoreOTP({ userId: fetchedUser.id, otp });
     await this.emailService.SentCodeToUserEmail(fetchedUser.email, otp);
+  }
 
-    //Will send otp to email using smtp
+  async VerifyRecovery(email: string, otp: number): Promise<void> {
+    Logger.info('AuthService.VerifyRecovery', { otp, email });
+
+    const fetchedUser = await this.db.User.GetUser({ email });
+    if (!fetchedUser) throw new AppError(400, 'User does not exist');
+
+    const response = await this.db.Auth.GetRecoveryOtp({ userId: fetchedUser.id, otp: otp });
+    if (!response) throw new AppError(400, 'Incorrect code try again or otp expired');
   }
 }
