@@ -82,5 +82,22 @@ export class AuthController {
       }
       res.json(body);
     });
+    this.router.post('/verify-otp', async (req: RequestBody<{ email: string; otp: number }>, res: Response) => {
+      let body;
+      try {
+        await AuthModel.VerifyotpSchema.validateAsync(req.body, {
+          abortEarly: false,
+        });
+
+        const db = res.locals.db as Db;
+        const service = new AuthService({ db });
+
+        await service.VerifyRecovery(req.body.email, req.body.otp);
+      } catch (error) {
+        genericError(error, res);
+        return;
+      }
+      res.json(body);
+    });
   }
 }

@@ -19,6 +19,11 @@ export const GenerateOtpSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+export const VerifyotpSchema = Joi.object({
+  email: Joi.string().email().required(),
+  otp: Joi.number().required(),
+});
+
 export interface RegisterUserBody {
   userName: string;
   email: string;
