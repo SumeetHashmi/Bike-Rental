@@ -82,4 +82,12 @@ export class AuthService {
     const response = await this.db.Auth.GetRecoveryOtp({ userId: fetchedUser.id, otp: otp });
     if (!response) throw new AppError(400, 'Incorrect code try again or otp expired');
   }
+
+  async ChangePassword(password: string, email: string): Promise<void> {
+    Logger.info('AuthService.ChangePassword', { password, email });
+    const hashedPassword = await Hash.hashPassword(password);
+    password = hashedPassword;
+
+    await this.db.User.UpdateUser({ email }, { password });
+  }
 }

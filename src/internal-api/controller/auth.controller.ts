@@ -99,5 +99,23 @@ export class AuthController {
       }
       res.json(body);
     });
+    this.router.post('/reset-password', async (req: RequestBody<AuthModel.RecoveryModel>, res: Response) => {
+      let body;
+      try {
+        await AuthModel.RecoveryModelSchema.validateAsync(req.body, {
+          abortEarly: false,
+        });
+        const db = res.locals.db as Db;
+
+        const service = new AuthService({ db });
+
+        await service.VerifyRecovery(req.body.email, req.body.otp);
+
+        await service.ChangePassword(req.body.password, req.body.email);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
   }
 }
