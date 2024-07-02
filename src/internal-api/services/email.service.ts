@@ -22,13 +22,13 @@ export class EmailService {
           to: [{ email: userEmail }],
           subject: 'Otp Verification to recover password ',
           sender: {
-            name: 'Linkwave',
-            email: 'info@linkwave.io',
+            name: 'Bike-Rental',
+            email: 'Sumeet@vonterra.io',
           },
           textContent: `
               <b>Hello </b> ${userEmail} 
               </br>
-              <b>Your Verification Code For Linkwave is </b> ${otp} 
+              <b>Your Verification Code For Bike Rental is </b> ${otp} 
               </br>
               `,
         },
