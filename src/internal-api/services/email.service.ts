@@ -6,6 +6,7 @@ import axios from 'axios';
 export class EmailService {
   constructor() {
     Logger.info('EmailService initialized...');
+    Logger.info('EmailService initialized...');
   }
 
   async SentCodeToUserEmail(userEmail: string, otp: number): Promise<undefined | string> {
