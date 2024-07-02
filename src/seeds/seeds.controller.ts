@@ -2,6 +2,7 @@ import { Db } from '../database/db';
 import { Env } from '../helpers';
 import { Logger } from '../helpers/logger';
 import { seedData } from './Data.seed';
+import { seedManager } from './AddManager.seed';
 
 export class SeedsController {
   private db: Db;
@@ -26,10 +27,8 @@ export class SeedsController {
 
   private async runProdSeeds() {
     Logger.info('Seeding all seeds...');
-    // const seeders = [
-    //   // new seeder functions here
-    // ]
-    // await Promise.all(seeders);
+    const seeders = [seedManager(this.db)];
+    await Promise.all(seeders);
   }
 
   private async runLocalSeeds() {
