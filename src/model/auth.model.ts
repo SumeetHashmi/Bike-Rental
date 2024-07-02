@@ -24,11 +24,23 @@ export const VerifyotpSchema = Joi.object({
   otp: Joi.number().required(),
 });
 
+export const RecoveryModelSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: joiPasswordValidation,
+  otp: Joi.number().required(),
+});
+
 export interface RegisterUserBody {
   userName: string;
   email: string;
   password: string;
   type?: UserType;
+}
+
+export interface RecoveryModel {
+  email: string;
+  password: string;
+  otp: number;
 }
 
 export interface LoginUser {

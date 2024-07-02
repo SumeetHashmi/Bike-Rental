@@ -69,4 +69,23 @@ export class UserDatabase {
 
     return res[0];
   }
+  async UpdateUser(where: Partial<Entities.User>, toUpdate: Partial<Entities.User>) {
+    this.logger.info('Db.UpdateUser', { where, toUpdate });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').where(where).update(toUpdate).returning('id');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      this.logger.error('Db.UpdateUser Error updating user info', err);
+      throw new AppError(500, `Error updating user  info `);
+    }
+
+    if (!res || res.length !== 1) {
+      this.logger.error('Db.UpdateUser Update failed');
+      throw new AppError(404, 'Update failed');
+    }
+  }
 }
