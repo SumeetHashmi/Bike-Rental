@@ -26,7 +26,10 @@ export class AuthService {
 
     const fetchedUser = await this.db.User.CreateUser(user);
 
-    const dataForToken = { id: fetchedUser, UserType: String(user.type) };
+    if (!user.type) {
+      throw new AppError(400, 'type undefined');
+    }
+    const dataForToken = { id: fetchedUser, UserType: user.type };
 
     const accessToken = Token.createAccessToken(dataForToken);
     const refreshToken = Token.createRefreshToken(dataForToken);
