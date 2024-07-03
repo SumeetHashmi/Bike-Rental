@@ -18,27 +18,17 @@ export class AuthService {
     this.emailService = new EmailService();
   }
 
-  public async CreateUser(user: AuthModel.RegisterUserBody): Promise<AuthModel.Tokens> {
+  public async CreateUser(user: AuthModel.RegisterUserBody): Promise<void> {
     Logger.info('AuthService.CreateUser', { user });
 
     const hashedPassword = await Hash.hashPassword(user.password);
     user.password = hashedPassword;
 
-    const fetchedUser = await this.db.User.CreateUser(user);
+    await this.db.User.CreateUser(user);
 
     if (!user.type) {
       throw new AppError(400, 'type undefined');
     }
-    const dataForToken = { id: fetchedUser, UserType: user.type };
-
-    const accessToken = Token.createAccessToken(dataForToken);
-    const refreshToken = Token.createRefreshToken(dataForToken);
-
-    const token: AuthModel.Tokens = {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    };
-    return token;
   }
 
   public async LoginUser(user: AuthModel.LoginUser): Promise<AuthModel.Tokens> {
