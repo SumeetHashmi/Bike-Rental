@@ -27,4 +27,10 @@ export class ManagerService {
 
     await this.db.Manager.UpdateBike({ id }, bikeData);
   }
+
+  public async DeleteBike(id: string): Promise<void> {
+    Logger.info('Manager.UpdateBike', { id });
+
+    await this.db.Manager.DeleteBike({ id });
+  }
 }
