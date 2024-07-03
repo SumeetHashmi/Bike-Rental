@@ -19,7 +19,7 @@ export class ManagerController {
   }
 
   private ManagerRouter(): void {
-    this.router.post('/create-bike', async (req: RequestBody<ManagerModel.CreateBikeBody>, res: Response) => {
+    this.router.post('/bike', async (req: RequestBody<ManagerModel.CreateBikeBody>, res: Response) => {
       let body;
       try {
         await ManagerModel.CreateBikeBodySchema.validateAsync(req.body, {
@@ -32,6 +32,25 @@ export class ManagerController {
         const service = new ManagerService({ db });
 
         await service.CreateBike(req.body);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
+    this.router.put('/bike/:id', async (req: RequestBody<Partial<Entities.BikeDetails>>, res: Response) => {
+      let body;
+      try {
+        await ManagerModel.UpdateBikeSchema.validateAsync(req.body, {
+          abortEarly: false,
+        });
+        if (!req.managerId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new ManagerService({ db });
+        const BikeId = req.params.id;
+
+        await service.UpdateBike(BikeId, req.body);
       } catch (error) {
         genericError(error, res);
       }

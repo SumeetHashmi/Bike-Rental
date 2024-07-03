@@ -15,3 +15,9 @@ export const CreateBikeBodySchema = Joi.object({
   bikeColor: Joi.string().required(),
   location: Joi.string().required(),
 });
+
+export const UpdateBikeSchema = Joi.object({
+  bikeModel: Joi.string().optional(),
+  bikeColor: Joi.string().optional(),
+  location: Joi.string().optional(),
+});

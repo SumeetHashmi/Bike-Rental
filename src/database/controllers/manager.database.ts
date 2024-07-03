@@ -23,7 +23,7 @@ export class ManagerDatabase {
     this.GetKnex = args.GetKnex;
     this.RunQuery = args.RunQuery;
   }
-  async CreateBike(bikeData: Partial<ManagerModel.CreateBikeBody>): Promise<string> {
+  async CreateBike(bikeData: ManagerModel.CreateBikeBody): Promise<string> {
     this.logger.info('Db.CreateUser', { bikeData });
 
     const knexdb = this.GetKnex();
@@ -40,6 +40,28 @@ export class ManagerDatabase {
       this.logger.info('Db.CreateUser User not created', err);
 
       throw new AppError(400, `User not created `);
+    }
+
+    const { id } = res[0];
+    return id;
+  }
+  async UpdateBike(where: Partial<Entities.BikeDetails>, toUpdate: Partial<Entities.BikeDetails>) {
+    this.logger.info('Db.UpdateBike', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bikeDetails').where(where).update(toUpdate).returning('id');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `Bike not updated`);
+    }
+
+    if (!res || res.length !== 1) {
+      this.logger.info('Db.UpdateBike Bike not updated', err);
+
+      throw new AppError(400, `Bike not updated `);
     }
 
     const { id } = res[0];

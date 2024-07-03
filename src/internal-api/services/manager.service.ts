@@ -17,8 +17,14 @@ export class ManagerService {
   }
 
   public async CreateBike(bikeData: ManagerModel.CreateBikeBody): Promise<void> {
-    Logger.info('AuthService.CreateUser', { bikeData });
+    Logger.info('Manager.CreateUser', { bikeData });
 
     await this.db.Manager.CreateBike(bikeData);
+  }
+
+  public async UpdateBike(id: string, bikeData: Partial<Entities.BikeDetails>): Promise<void> {
+    Logger.info('Manager.UpdateBike', { bikeData });
+
+    await this.db.Manager.UpdateBike({ id }, bikeData);
   }
 }
