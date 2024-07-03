@@ -28,6 +28,10 @@ export const LoggerLevel = {
   LOG_LEVEL: Process.env.LOG_LEVEL || 'debug',
 };
 
+export const ManagerPassword = {
+  password: Process.env.password as string,
+};
+
 export const Database = {
   DB_USER: Process.env.DB_USER as string,
   DB_NAME: Process.env.DB_NAME as string,

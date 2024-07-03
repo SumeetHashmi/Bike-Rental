@@ -6,6 +6,7 @@ import { Entities, Hash } from '../../helpers';
 import * as Token from '../../helpers/token';
 import { generateOTP } from '../../helpers/otp';
 import { EmailService } from './email.service';
+import { UserType } from '../../helpers/entities';
 
 export class AuthService {
   private db: Db;
@@ -25,7 +26,7 @@ export class AuthService {
 
     const fetchedUser = await this.db.User.CreateUser(user);
 
-    const dataForToken = { id: fetchedUser };
+    const dataForToken = { id: fetchedUser, UserType: String(user.type) };
 
     const accessToken = Token.createAccessToken(dataForToken);
     const refreshToken = Token.createRefreshToken(dataForToken);
@@ -48,7 +49,7 @@ export class AuthService {
     const isCorrectPassword = await Hash.verifyPassword(user.password, fetchedUser.password);
     if (!isCorrectPassword) throw new AppError(400, 'Invalid credentials');
 
-    const dataForToken = { id: fetchedUser.id };
+    const dataForToken = { id: fetchedUser.id, UserType: fetchedUser.type };
     const accessToken = Token.createAccessToken(dataForToken);
     const refreshToken = Token.createRefreshToken(dataForToken);
 
