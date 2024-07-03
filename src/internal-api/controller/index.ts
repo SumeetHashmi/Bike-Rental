@@ -8,6 +8,7 @@ import { UserController } from './user.controller';
 
 import { jwtAuth } from '../middlewares/api-auth';
 import { UserType } from '../../helpers/entities';
+import { ManagerController } from './manager.controller';
 
 export class ApiController {
   public router: express.Router;
@@ -33,6 +34,7 @@ export class ApiController {
       jwtAuth(req, res, next);
     });
     this.router.use('/user', new UserController().router);
+    this.router.use('/manager', new ManagerController().router);
     this.router.use('*', (req: express.Request, res: express.Response): express.Response => {
       try {
         throw `the Endpoint ${req.originalUrl} with the method ${req.method} Is not hosted on our server!`;
