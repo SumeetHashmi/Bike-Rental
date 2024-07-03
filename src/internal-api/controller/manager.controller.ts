@@ -37,6 +37,7 @@ export class ManagerController {
       }
       res.json(body);
     });
+
     this.router.put('/bike/:id', async (req: RequestBody<Partial<Entities.BikeDetails>>, res: Response) => {
       let body;
       try {
@@ -51,6 +52,25 @@ export class ManagerController {
         const BikeId = req.params.id;
 
         await service.UpdateBike(BikeId, req.body);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
+    this.router.delete('/bike/:id', async (req: Request, res: Response) => {
+      let body;
+      try {
+        // await ManagerModel.UpdateBikeSchema.validateAsync(req.body, {
+        //   abortEarly: false,
+        // });
+        if (!req.managerId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new ManagerService({ db });
+        const BikeId = req.params.id;
+
+        await service.DeleteBike(BikeId);
       } catch (error) {
         genericError(error, res);
       }

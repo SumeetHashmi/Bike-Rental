@@ -67,4 +67,17 @@ export class ManagerDatabase {
     const { id } = res[0];
     return id;
   }
+  async DeleteBike(where: Partial<Entities.BikeDetails>) {
+    this.logger.info('Db.UpdateBike', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bikeDetails').where(where).del();
+
+    const { err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `Bike not deleted`);
+    }
+  }
 }
