@@ -23,6 +23,17 @@ export interface BikeDetails {
   updatedAt: string;
 }
 
+export interface GetBikeDetails {
+  id: string;
+  bikeModel: string;
+  bikeColor: string;
+  location: string;
+  status: string;
+  averageRating: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Ratings {
   id: string;
   userId: string;
