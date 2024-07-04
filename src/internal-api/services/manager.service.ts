@@ -72,4 +72,9 @@ export class ManagerService {
 
     await this.db.User.CreateUser(user);
   }
+  public async DeleteUser(id: string): Promise<void> {
+    Logger.info('Manager.DeleteUser', { id });
+
+    await this.db.Manager.DeleteUser({ id });
+  }
 }
