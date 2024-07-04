@@ -40,19 +40,19 @@ export class ManagerController {
       }
       res.json(body);
     });
-    this.router.post('/user', async (req: RequestBody<AuthModel.RegisterUserBody>, res: Response) => {
+    this.router.post('/user', async (req: RequestBody<ManagerModel.RegisterUserBody>, res: Response) => {
       let body;
       try {
-        await AuthModel.RegisterUserBodySchema.validateAsync(req.body, {
+        await ManagerModel.RegisterUserBodySchema.validateAsync(req.body, {
           abortEarly: false,
         });
         if (!req.managerId) throw new AppError(400, 'Unauthorized');
-        const userData = { ...req.body, type: UserType.Manager };
+
         const db = res.locals.db as Db;
 
-        const service = new AuthService({ db });
+        const service = new ManagerService({ db });
 
-        await service.CreateUser(userData);
+        await service.CreateUser(req.body);
       } catch (error) {
         genericError(error, res);
       }
