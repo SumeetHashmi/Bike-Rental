@@ -58,6 +58,22 @@ export class ManagerController {
       }
       res.json(body);
     });
+    this.router.delete('/user/:id', async (req: Request, res: Response) => {
+      let body;
+      try {
+        if (!req.managerId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new ManagerService({ db });
+        const UserId = req.params.id;
+
+        await service.DeleteUser(UserId);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
 
     this.router.put('/bike/:id', async (req: RequestBody<Partial<Entities.BikeDetails>>, res: Response) => {
       let body;
