@@ -94,6 +94,25 @@ export class ManagerController {
       }
       res.json(body);
     });
+    this.router.put('/user/:id', async (req: RequestBody<Partial<Entities.User>>, res: Response) => {
+      let body;
+      try {
+        await ManagerModel.UpdateUserSchema.validateAsync(req.body, {
+          abortEarly: false,
+        });
+        if (!req.managerId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new ManagerService({ db });
+        const UserId = req.params.id;
+
+        await service.UpdateUser(UserId, req.body);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
     this.router.delete('/bike/:id', async (req: Request, res: Response) => {
       let body;
       try {

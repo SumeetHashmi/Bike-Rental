@@ -67,6 +67,25 @@ export class ManagerDatabase {
     const { id } = res[0];
     return id;
   }
+  async UpdateUser(where: Partial<Entities.BikeDetails>, toUpdate: Partial<Entities.BikeDetails>) {
+    this.logger.info('Db.UpdateUser', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').where(where).update(toUpdate).returning('id');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `User not updated`);
+    }
+
+    if (!res || res.length !== 1) {
+      this.logger.info('Db.UpdateBike User not updated', err);
+
+      throw new AppError(400, `User not updated `);
+    }
+  }
   async DeleteBike(where: Partial<Entities.BikeDetails>) {
     this.logger.info('Db.UpdateBike', { where });
 
