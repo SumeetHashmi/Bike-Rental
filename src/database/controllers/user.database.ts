@@ -128,4 +128,17 @@ export class UserDatabase {
     const { id } = res[0];
     return id;
   }
+  async DeleteReservation(where: Partial<Entities.BikeDetails>) {
+    this.logger.info('Db.DeleteReservation', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bookingDates').where(where).del();
+
+    const { err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `Bike not deleted`);
+    }
+  }
 }

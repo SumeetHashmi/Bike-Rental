@@ -51,15 +51,20 @@ export class UserService {
   }
 
   public async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
-    Logger.info('Manager.UpdateBike');
+    Logger.info('User.UpdateBike');
 
     const BikesData = await this.db.User.GetBikes();
 
     return BikesData;
   }
   public async ReservedBikes(bikeData: UserModels.BikeReservationModel): Promise<void> {
-    Logger.info('Manager.CreateUser', { bikeData });
+    Logger.info('User.CreateUser', { bikeData });
 
     await this.db.User.ReservedBike(bikeData);
+  }
+  public async DeleteReservation(id: string): Promise<void> {
+    Logger.info('User.UpdateBike', { id });
+
+    await this.db.User.DeleteReservation({ id });
   }
 }

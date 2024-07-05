@@ -81,5 +81,21 @@ export class UserController {
       }
       res.json(body);
     });
+    this.router.delete('/bike/:id', async (req: Request, res: Response) => {
+      let body;
+      try {
+        if (!req.userId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new UserService({ db });
+        const ReservationId = req.params.id;
+
+        await service.DeleteReservation(ReservationId);
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
   }
 }
