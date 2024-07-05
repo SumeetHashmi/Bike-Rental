@@ -4,7 +4,7 @@ import { Knex } from 'knex';
 import { Entities } from '../../helpers';
 import { AppError } from '../../helpers/errors';
 import { Logger } from '../../helpers/logger';
-import * as UserModel from '../../model/auth.model';
+import * as UserModel from '../../model/user.model';
 import { DatabaseErrors } from '../../helpers/contants';
 
 export class UserDatabase {
@@ -105,5 +105,27 @@ export class UserDatabase {
       this.logger.error('Db.UpdateBike');
     }
     return res;
+  }
+  async ReservedBike(bikeData: UserModel.BikeReservationModel): Promise<string> {
+    this.logger.info('Db.ReservedBike', { bikeData });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bookingDates').insert(bikeData, 'id');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `Bike not reserved `);
+    }
+
+    if (!res || res.length !== 1) {
+      this.logger.info('Db.ReservedBike Bike not reserved ', err);
+
+      throw new AppError(400, `Bike not reserved  `);
+    }
+
+    const { id } = res[0];
+    return id;
   }
 }

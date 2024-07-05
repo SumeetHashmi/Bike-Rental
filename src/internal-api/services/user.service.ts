@@ -57,4 +57,9 @@ export class UserService {
 
     return BikesData;
   }
+  public async ReservedBikes(bikeData: UserModels.BikeReservationModel): Promise<void> {
+    Logger.info('Manager.CreateUser', { bikeData });
+
+    await this.db.User.ReservedBike(bikeData);
+  }
 }
