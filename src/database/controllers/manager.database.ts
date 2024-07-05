@@ -98,6 +98,7 @@ export class ManagerDatabase {
     }
     return res;
   }
+
   async DeleteUser(where: Partial<Entities.BikeDetails>) {
     this.logger.info('Db.DeleteUser', { where });
 
@@ -111,4 +112,5 @@ export class ManagerDatabase {
       throw new AppError(400, `User not deleted`);
     }
   }
+
 }

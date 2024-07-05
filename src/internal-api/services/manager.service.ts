@@ -64,6 +64,7 @@ export class ManagerService {
 
     return updatedBikesData;
   }
+
   public async CreateUser(user: ManagerModel.RegisterUserBody): Promise<void> {
     Logger.info('AuthService.CreateUser', { user });
 
@@ -77,4 +78,5 @@ export class ManagerService {
 
     await this.db.Manager.DeleteUser({ id });
   }
+
 }
