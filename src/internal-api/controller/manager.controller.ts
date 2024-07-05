@@ -149,6 +149,7 @@ export class ManagerController {
       }
       res.json(body);
     });
+
     this.router.get('/users', async (req: Request, res: Response) => {
       let body;
       try {
