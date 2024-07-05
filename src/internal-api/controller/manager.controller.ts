@@ -130,5 +130,24 @@ export class ManagerController {
       }
       res.json(body);
     });
+    this.router.get('/users', async (req: Request, res: Response) => {
+      let body;
+      try {
+        if (!req.managerId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new ManagerService({ db });
+
+        const bikeDetails = await service.GetUsers();
+
+        body = {
+          data: bikeDetails,
+        };
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
   }
 }

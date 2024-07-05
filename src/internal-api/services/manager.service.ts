@@ -64,6 +64,15 @@ export class ManagerService {
 
     return updatedBikesData;
   }
+
+  public async GetUsers(): Promise<Entities.User[] | undefined> {
+    Logger.info('Manager.GetUsers');
+
+    const UsersData = await this.db.Manager.GetUsers();
+
+    return UsersData;
+  }
+
   public async CreateUser(user: ManagerModel.ManagerRegisterUserBody): Promise<void> {
     Logger.info('AuthService.CreateUser', { user });
 
