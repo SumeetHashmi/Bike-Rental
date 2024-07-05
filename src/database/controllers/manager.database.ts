@@ -98,4 +98,19 @@ export class ManagerDatabase {
     }
     return res;
   }
+
+  async DeleteUser(where: Partial<Entities.BikeDetails>) {
+    this.logger.info('Db.DeleteUser', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').where(where).del();
+
+    const { err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `User not deleted`);
+    }
+  }
+
 }

@@ -64,4 +64,19 @@ export class ManagerService {
 
     return updatedBikesData;
   }
+
+  public async CreateUser(user: ManagerModel.RegisterUserBody): Promise<void> {
+    Logger.info('AuthService.CreateUser', { user });
+
+    const hashedPassword = await Hash.hashPassword(user.password);
+    user.password = hashedPassword;
+
+    await this.db.User.CreateUser(user);
+  }
+  public async DeleteUser(id: string): Promise<void> {
+    Logger.info('Manager.DeleteUser', { id });
+
+    await this.db.Manager.DeleteUser({ id });
+  }
+
 }
