@@ -97,5 +97,27 @@ export class UserController {
       }
       res.json(body);
     });
+    this.router.post('/rating', async (req: RequestBody<UserModel.BikeRatingModel>, res: Response) => {
+      let body;
+      try {
+        await UserModel.BikeRatingModelSchema.validateAsync(req.body, {
+          abortEarly: false,
+        });
+
+        if (!req.userId) throw new AppError(400, 'Unauthorized');
+
+        const db = res.locals.db as Db;
+
+        const service = new UserService({ db });
+        const bikeDetails = await service.AddRating(req.body, req.userId);
+
+        body = {
+          data: bikeDetails,
+        };
+      } catch (error) {
+        genericError(error, res);
+      }
+      res.json(body);
+    });
   }
 }

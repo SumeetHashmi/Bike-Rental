@@ -67,4 +67,12 @@ export class UserService {
 
     await this.db.User.DeleteReservation({ id });
   }
+  public async AddRating(ratingData: UserModels.BikeRatingModel, userId: string): Promise<void> {
+    Logger.info('Manager.AddRating', { ratingData });
+
+    const booking = await this.db.User.GetRating({ id: ratingData.reservationId, userId: userId });
+
+    if (!booking) throw new AppError(400, 'No booking exist');
+    await this.db.User.UpdateRating({ id: ratingData.reservationId }, { rating: ratingData.rating });
+  }
 }

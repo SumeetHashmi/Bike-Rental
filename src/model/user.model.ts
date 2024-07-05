@@ -39,6 +39,16 @@ export interface BikeReservationModel {
   endDate: string;
 }
 
+export interface BikeRatingModel {
+  reservationId: string;
+  rating: number;
+}
+
+export const BikeRatingModelSchema = Joi.object({
+  reservationId: Joi.string().required(),
+  rating: Joi.number().required(),
+});
+
 export const BikeReservationModelSchema = Joi.object({
   userId: Joi.string().required(),
   bikeId: Joi.string().required(),

@@ -141,4 +141,45 @@ export class UserDatabase {
       throw new AppError(400, `Bike not deleted`);
     }
   }
+  async GetRating(where: Partial<Entities.BookingDates>) {
+    this.logger.info('Db.GetRating', { where });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bookingDates').where(where);
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      throw new AppError(400, `Bike not reserved ${err}`);
+    }
+
+    if (!res) {
+      this.logger.info('Db.ReservedBike Bike not reserved ', err);
+
+      throw new AppError(400, `Bike not reserved  `);
+    }
+
+    return res;
+  }
+
+  async UpdateRating(where: Partial<Entities.BookingDates>, toUpdate: Partial<Entities.BookingDates>) {
+    this.logger.info('Db.UpdateUser', { where, toUpdate });
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bookingDates').where(where).update(toUpdate).returning('id');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (err) {
+      this.logger.error('Db.UpdateUser Error updating user info', err);
+      throw new AppError(500, `Error updating user  info `);
+    }
+
+    if (!res || res.length !== 1) {
+      this.logger.error('Db.UpdateUser Update failed');
+      throw new AppError(404, 'Update failed');
+    }
+  }
 }

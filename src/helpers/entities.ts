@@ -49,6 +49,7 @@ export interface BookingDates {
   userId: string;
   startDate: string;
   endDate: string;
+  rating: number;
   createdAt: string;
   updatedAt: string;
 }
