@@ -64,8 +64,7 @@ export class ManagerService {
 
     return updatedBikesData;
   }
-
-  public async CreateUser(user: ManagerModel.RegisterUserBody): Promise<void> {
+  public async CreateUser(user: ManagerModel.ManagerRegisterUserBody): Promise<void> {
     Logger.info('AuthService.CreateUser', { user });
 
     const hashedPassword = await Hash.hashPassword(user.password);
@@ -78,5 +77,4 @@ export class ManagerService {
 
     await this.db.Manager.DeleteUser({ id });
   }
-
 }

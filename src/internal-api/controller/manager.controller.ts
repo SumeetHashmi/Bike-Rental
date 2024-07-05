@@ -40,10 +40,10 @@ export class ManagerController {
       }
       res.json(body);
     });
-    this.router.post('/user', async (req: RequestBody<ManagerModel.RegisterUserBody>, res: Response) => {
+    this.router.post('/user', async (req: RequestBody<ManagerModel.ManagerRegisterUserBody>, res: Response) => {
       let body;
       try {
-        await ManagerModel.RegisterUserBodySchema.validateAsync(req.body, {
+        await ManagerModel.ManagerRegisterUserBodySchema.validateAsync(req.body, {
           abortEarly: false,
         });
         if (!req.managerId) throw new AppError(400, 'Unauthorized');
