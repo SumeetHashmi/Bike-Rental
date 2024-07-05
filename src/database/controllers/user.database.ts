@@ -88,4 +88,22 @@ export class UserDatabase {
       throw new AppError(404, 'Update failed');
     }
   }
+  async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
+    this.logger.info('Db.UpdateBike');
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (res?.length === 0) {
+      return undefined;
+    }
+
+    if (err) {
+      this.logger.error('Db.UpdateBike');
+    }
+    return res;
+  }
 }
