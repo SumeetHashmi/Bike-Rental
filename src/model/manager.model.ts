@@ -10,14 +10,14 @@ export interface CreateBikeBody {
   location: string;
 }
 
-export interface RegisterUserBody {
+export interface ManagerRegisterUserBody {
   userName: string;
   email: string;
   password: string;
   type?: UserType;
 }
 
-export const RegisterUserBodySchema = Joi.object({
+export const ManagerRegisterUserBodySchema = Joi.object({
   userName: Joi.string().required(),
   email: Joi.string().email().required(),
   password: joiPasswordValidation,
