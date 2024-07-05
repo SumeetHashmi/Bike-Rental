@@ -98,6 +98,24 @@ export class ManagerDatabase {
     }
     return res;
   }
+  async GetUsers(): Promise<Entities.User[] | undefined> {
+    this.logger.info('Db.GetUsers');
+
+    const knexdb = this.GetKnex();
+
+    const query = knexdb('users').select('*');
+
+    const { res, err } = await this.RunQuery(query);
+
+    if (res?.length === 0) {
+      return undefined;
+    }
+
+    if (err) {
+      this.logger.error('Db.GetUsers');
+    }
+    return res;
+  }
   async DeleteUser(where: Partial<Entities.BikeDetails>) {
     this.logger.info('Db.DeleteUser', { where });
 
