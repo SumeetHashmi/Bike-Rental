@@ -28,6 +28,12 @@ export class ManagerService {
     await this.db.Manager.UpdateBike({ id }, bikeData);
   }
 
+  public async UpdateUser(id: string, userData: Partial<Entities.BikeDetails>): Promise<void> {
+    Logger.info('Manager.UpdateBike', { userData });
+
+    await this.db.Manager.UpdateUser({ id }, userData);
+  }
+
   public async DeleteBike(id: string): Promise<void> {
     Logger.info('Manager.UpdateBike', { id });
 
@@ -70,7 +76,31 @@ export class ManagerService {
 
     const UsersData = await this.db.Manager.GetUsers();
 
-    return UsersData;
+    let updatedUsersData;
+    if (UsersData) {
+      const reservationData = [
+        {
+          model: 'Dpk12',
+          location: 'Lahore',
+          color: 'Black',
+          startDate: '2024-06-27T10:00:00',
+          endDate: '2024-06-29T22:04:00',
+        },
+        {
+          model: 'DHk',
+          location: 'Sahiwal',
+          color: 'Red',
+          startDate: '2024-06-24T06:59:42',
+          endDate: '2024-06-26T07:36:15',
+        },
+      ];
+
+      updatedUsersData = UsersData.map((user) => ({ ...user, reservation: reservationData }));
+    } else {
+      Logger.info('BikeData is undefined');
+    }
+
+    return updatedUsersData;
   }
 
   public async CreateUser(user: ManagerModel.ManagerRegisterUserBody): Promise<void> {

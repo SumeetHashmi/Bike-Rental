@@ -35,3 +35,9 @@ export const UpdateBikeSchema = Joi.object({
   bikeColor: Joi.string().optional(),
   location: Joi.string().optional(),
 });
+
+export const UpdateUserSchema = Joi.object({
+  userName: Joi.string().optional(),
+  email: Joi.string().optional(),
+  type: Joi.string().optional(),
+});
