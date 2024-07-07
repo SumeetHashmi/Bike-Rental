@@ -32,6 +32,30 @@ export interface GetUser {
   previousReservations: PreviousReservations[];
 }
 
+export interface BikeReservationModel {
+  userId: string;
+  bikeId: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface BikeRatingModel {
+  reservationId: string;
+  rating: number;
+}
+
+export const BikeRatingModelSchema = Joi.object({
+  reservationId: Joi.string().required(),
+  rating: Joi.number().required(),
+});
+
+export const BikeReservationModelSchema = Joi.object({
+  userId: Joi.string().required(),
+  bikeId: Joi.string().required(),
+  startDate: Joi.string().required(),
+  endDate: Joi.string().required(),
+});
+
 export const ManagerRegisterUserBodySchema = Joi.object({
   userName: Joi.string().required(),
   email: Joi.string().email().required(),

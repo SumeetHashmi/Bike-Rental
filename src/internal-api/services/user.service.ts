@@ -51,10 +51,28 @@ export class UserService {
   }
 
   public async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
-    Logger.info('Manager.UpdateBike');
+    Logger.info('User.UpdateBike');
 
     const BikesData = await this.db.User.GetBikes();
 
     return BikesData;
+  }
+  public async ReservedBikes(bikeData: UserModels.BikeReservationModel): Promise<void> {
+    Logger.info('User.CreateUser', { bikeData });
+
+    await this.db.User.ReservedBike(bikeData);
+  }
+  public async DeleteReservation(id: string): Promise<void> {
+    Logger.info('User.UpdateBike', { id });
+
+    await this.db.User.DeleteReservation({ id });
+  }
+  public async AddRating(ratingData: UserModels.BikeRatingModel, userId: string): Promise<void> {
+    Logger.info('Manager.AddRating', { ratingData });
+
+    const booking = await this.db.User.GetRating({ id: ratingData.reservationId, userId: userId });
+
+    if (!booking) throw new AppError(400, 'No booking exist');
+    await this.db.User.UpdateRating({ id: ratingData.reservationId }, { rating: ratingData.rating });
   }
 }
