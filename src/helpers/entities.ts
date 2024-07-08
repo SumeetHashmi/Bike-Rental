@@ -13,6 +13,11 @@ export interface User {
   updatedAt: string;
 }
 
+export interface QueryData {
+  model?: string;
+  location?: string;
+}
+
 export interface BikeDetails {
   id: string;
   bikeModel: string;

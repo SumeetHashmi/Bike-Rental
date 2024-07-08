@@ -24,36 +24,17 @@ export class UserService {
 
     const UserData = await this.db.User.GetUser({ id });
 
-    if (!UserData) throw new AppError(400, 'No uiser exist ');
+    if (!UserData) throw new AppError(400, 'No user exist ');
 
-    const previousReservations = [
-      {
-        id: '1',
-        bikeModel: 'Mountain X200',
-        bikeColor: 'Red',
-        location: 'Downtown Bike Shop',
-        startDate: '2024-05-01',
-        endDate: '2024-05-07',
-        averageRating: 4.5,
-      },
-      {
-        id: '2',
-        bikeModel: 'City Cruiser 300',
-        bikeColor: 'Blue',
-        location: 'Uptown Bike Rentals',
-        startDate: '2024-06-10',
-        endDate: '2024-06-15',
-        averageRating: 4.8,
-      },
-    ];
+    const previousReservations = await this.db.User.GetReservation({ userId: id });
 
     return { ...UserData, previousReservations };
   }
 
-  public async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
+  public async GetBikes(data: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
     Logger.info('User.UpdateBike');
 
-    const BikesData = await this.db.User.GetBikes();
+    const BikesData = await this.db.User.GetBikes(data);
 
     return BikesData;
   }
@@ -70,7 +51,7 @@ export class UserService {
   public async AddRating(ratingData: UserModels.BikeRatingModel, userId: string): Promise<void> {
     Logger.info('Manager.AddRating', { ratingData });
 
-    const booking = await this.db.User.GetRating({ id: ratingData.reservationId, userId: userId });
+    const booking = await this.db.User.GetReservation({ id: ratingData.reservationId, userId: userId });
 
     if (!booking) throw new AppError(400, 'No booking exist');
     await this.db.User.UpdateRating({ id: ratingData.reservationId }, { rating: ratingData.rating });
