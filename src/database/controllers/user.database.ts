@@ -112,7 +112,7 @@ export class UserDatabase {
     }
     return res;
   }
-  async ReservedBike(bikeData: UserModel.BikeReservationModel): Promise<string> {
+  async ReservedBike(bikeData: Partial<Entities.BookingDates>): Promise<string> {
     this.logger.info('Db.ReservedBike', { bikeData });
 
     const knexdb = this.GetKnex();
@@ -152,7 +152,10 @@ export class UserDatabase {
 
     const knexdb = this.GetKnex();
 
-    const query = knexdb('bookingDates').where(where);
+    const query = knexdb('bookingDates')
+      .select('bookingDates.*', 'bikeModel', 'bikeColor', 'location')
+      .leftJoin('bikeDetails', 'bookingDates.bikeId', 'bikeDetails.id')
+      .where(where);
 
     const { res, err } = await this.RunQuery(query);
 

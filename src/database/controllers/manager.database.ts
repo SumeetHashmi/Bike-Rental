@@ -143,6 +143,7 @@ export class ManagerDatabase {
         )
         .leftJoin('bookingDates', 'users.id', 'bookingDates.userId')
         .leftJoin('bikeDetails', 'bookingDates.bikeId', 'bikeDetails.id')
+        .whereNot({ 'users.email': 'admin@bikerental.app' })
         .groupBy('users.id');
 
       const { res, err } = await this.RunQuery(query);

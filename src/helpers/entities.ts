@@ -23,7 +23,7 @@ export interface BikeDetails {
   bikeModel: string;
   bikeColor: string;
   location: string;
-  status: string;
+  status: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -33,7 +33,7 @@ export interface GetBikeDetails {
   bikeModel: string;
   bikeColor: string;
   location: string;
-  status: string;
+  status: boolean;
   averageRating: string;
   createdAt: string;
   updatedAt: string;
