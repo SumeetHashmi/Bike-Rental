@@ -33,7 +33,6 @@ export interface GetUser {
 }
 
 export interface BikeReservationModel {
-  userId: string;
   bikeId: string;
   startDate: string;
   endDate: string;
@@ -50,7 +49,6 @@ export const BikeRatingModelSchema = Joi.object({
 });
 
 export const BikeReservationModelSchema = Joi.object({
-  userId: Joi.string().required(),
   bikeId: Joi.string().required(),
   startDate: Joi.string().required(),
   endDate: Joi.string().required(),

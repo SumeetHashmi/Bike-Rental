@@ -38,10 +38,10 @@ export class UserService {
 
     return BikesData;
   }
-  public async ReservedBikes(bikeData: UserModels.BikeReservationModel): Promise<void> {
+  public async ReservedBikes(bikeData: UserModels.BikeReservationModel, userId: string): Promise<void> {
     Logger.info('User.CreateUser', { bikeData });
 
-    await this.db.User.ReservedBike(bikeData);
+    await this.db.User.ReservedBike({ userId, ...bikeData });
   }
   public async DeleteReservation(id: string): Promise<void> {
     Logger.info('User.UpdateBike', { id });

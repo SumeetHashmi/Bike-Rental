@@ -21,7 +21,7 @@ export class UserController {
     this.router.get('/', async (req: Request, res: Response) => {
       let body;
       try {
-        if (!req.userId) throw new AppError(400, 'Unauthorized');
+        if (!req.userId && !req.managerId) throw new AppError(400, 'Unauthorized');
 
         const db = res.locals.db as Db;
 
@@ -71,7 +71,7 @@ export class UserController {
 
         const service = new UserService({ db });
 
-        const bikeDetails = await service.ReservedBikes(req.body);
+        const bikeDetails = await service.ReservedBikes(req.body, req.userId);
 
         body = {
           data: bikeDetails,
@@ -81,7 +81,8 @@ export class UserController {
       }
       res.json(body);
     });
-    this.router.delete('/bike/:id', async (req: Request, res: Response) => {
+
+    this.router.delete('/cancel-reservation/:id', async (req: Request, res: Response) => {
       let body;
       try {
         if (!req.userId) throw new AppError(400, 'Unauthorized');
