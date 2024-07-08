@@ -27,7 +27,7 @@ export class UserController {
 
         const service = new UserService({ db });
 
-        const UserDetails = await service.GetUserData(req.userId);
+        const UserDetails = await service.GetUserData(req.userId || req.managerId);
 
         body = {
           data: UserDetails,
