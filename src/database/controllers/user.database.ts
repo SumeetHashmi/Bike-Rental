@@ -151,11 +151,15 @@ export class UserDatabase {
     this.logger.info('Db.GetRGetReservationating', { where });
 
     const knexdb = this.GetKnex();
+    const { id, ...data } = where;
 
     const query = knexdb('bookingDates')
       .select('bookingDates.*', 'bikeModel', 'bikeColor', 'location')
       .leftJoin('bikeDetails', 'bookingDates.bikeId', 'bikeDetails.id')
-      .where(where);
+      .where(data);
+    if (id) {
+      query.where({ 'bookingDates.id': id });
+    }
 
     const { res, err } = await this.RunQuery(query);
 
