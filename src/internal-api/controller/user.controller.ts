@@ -38,7 +38,7 @@ export class UserController {
       res.json(body);
     });
 
-    this.router.get('/bikes', async (req: Request, res: Response) => {
+    this.router.get('/bikes', async (req: RequestQuery<{ model?: string; location?: string }>, res: Response) => {
       let body;
       try {
         if (!req.userId) throw new AppError(400, 'Unauthorized');
@@ -47,7 +47,7 @@ export class UserController {
 
         const service = new UserService({ db });
 
-        const bikeDetails = await service.GetBikes();
+        const bikeDetails = await service.GetBikes(req.query);
 
         body = {
           data: bikeDetails,

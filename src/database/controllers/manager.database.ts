@@ -122,19 +122,47 @@ export class ManagerDatabase {
 
     const knexdb = this.GetKnex();
 
-    const query = knexdb('users').select('*');
+    try {
+      const query = knexdb('users')
+        .select(
+          'users.*',
+          knexdb.raw(`
+            COALESCE(
+              JSON_AGG(
+                JSON_BUILD_OBJECT(
+                  'model', "bikeDetails"."bikeModel",
+                  'location', "bikeDetails"."location",
+                  'color', "bikeDetails"."bikeColor",
+                  'startDate', "bookingDates"."startDate",
+                  'endDate', "bookingDates"."endDate"
+                )
+              ) FILTER (WHERE "bookingDates"."id" IS NOT NULL),
+              '[]'
+            ) AS reservations
+          `),
+        )
+        .leftJoin('bookingDates', 'users.id', 'bookingDates.userId')
+        .leftJoin('bikeDetails', 'bookingDates.bikeId', 'bikeDetails.id')
+        .groupBy('users.id');
 
-    const { res, err } = await this.RunQuery(query);
+      const { res, err } = await this.RunQuery(query);
 
-    if (res?.length === 0) {
+      if (err) {
+        this.logger.error('Db.GetUsers', err);
+        return undefined;
+      }
+
+      if (res?.length === 0) {
+        return undefined;
+      }
+
+      return res;
+    } catch (error) {
+      this.logger.error('Db.GetUsers', error);
       return undefined;
     }
-
-    if (err) {
-      this.logger.error('Db.GetUsers');
-    }
-    return res;
   }
+
   async DeleteUser(where: Partial<Entities.BikeDetails>) {
     this.logger.info('Db.DeleteUser', { where });
 

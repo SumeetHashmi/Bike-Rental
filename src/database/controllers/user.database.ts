@@ -88,12 +88,18 @@ export class UserDatabase {
       throw new AppError(404, 'Update failed');
     }
   }
-  async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
+  async GetBikes(data: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
     this.logger.info('Db.UpdateBike');
 
     const knexdb = this.GetKnex();
 
-    const query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
+    let query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
+    if (data.location) {
+      query = query.where({ 'bikeDetails.location': data.location });
+    }
+    if (data.model) {
+      query = query.where({ 'bikeDetails.bikeModel': parseInt(data.model) });
+    }
 
     const { res, err } = await this.RunQuery(query);
 
@@ -141,8 +147,8 @@ export class UserDatabase {
       throw new AppError(400, `Bike not deleted`);
     }
   }
-  async GetRating(where: Partial<Entities.BookingDates>) {
-    this.logger.info('Db.GetRating', { where });
+  async GetReservation(where: Partial<Entities.BookingDates>) {
+    this.logger.info('Db.GetRGetReservationating', { where });
 
     const knexdb = this.GetKnex();
 
