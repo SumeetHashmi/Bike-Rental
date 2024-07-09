@@ -95,15 +95,15 @@ export class UserDatabase {
     const knexdb = this.GetKnex();
 
     const query = knexdb('bikeDetails')
-      .select('bikeDetails.*', knexdb.raw('COALESCE(AVG(bookingDates.rating), 0) as "averageRating"'))
+      .select('*', knexdb.raw(`5 as "averageRating"`))
       .leftJoin('bookingDates', 'bikeDetails.id', 'bookingDates.bikeId')
+
       .where(data)
       .where(function () {
         if (startDate && endDate) {
           this.where('bookingDates.startDate', '>', endDate).orWhere('bookingDates.endDate', '<', startDate);
         }
-      })
-      .groupBy('bikeDetails.id');
+      });
 
     const { res, err } = await this.RunQuery(query);
 
@@ -112,13 +112,10 @@ export class UserDatabase {
     }
 
     if (err) {
-      this.logger.error('Db.UpdateBike', err);
-      throw new Error('Error executing query');
+      this.logger.error('Db.UpdateBike');
     }
-
     return res;
   }
-
   async ReservedBike(bikeData: Partial<Entities.BookingDates>): Promise<string> {
     this.logger.info('Db.ReservedBike', { bikeData });
 
