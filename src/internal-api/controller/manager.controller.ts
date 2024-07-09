@@ -159,8 +159,9 @@ export class ManagerController {
         const db = res.locals.db as Db;
 
         const service = new ManagerService({ db });
+        const filters = req.query;
 
-        const bikeDetails = await service.GetUsers();
+        const bikeDetails = await service.GetUsers(filters);
 
         body = {
           data: bikeDetails,

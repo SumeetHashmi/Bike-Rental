@@ -12,6 +12,11 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+export interface FilterUser {
+  userName: string;
+  email: string;
+  type: UserType;
+}
 
 export interface QueryData {
   bikeModel?: string;

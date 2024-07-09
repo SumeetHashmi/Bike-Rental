@@ -48,10 +48,10 @@ export class ManagerService {
     return BikesData;
   }
 
-  public async GetUsers(): Promise<Entities.User[] | undefined> {
-    Logger.info('Manager.GetUsers');
+  public async GetUsers(filters: Partial<Entities.FilterUser>): Promise<Entities.User[] | undefined> {
+    Logger.info('DB.manager.GetUser', filters);
 
-    const UsersData = await this.db.Manager.GetUsers();
+    const UsersData = await this.db.Manager.GetUsers(filters);
 
     return UsersData;
   }
