@@ -153,8 +153,8 @@ export class ManagerDatabase {
     return res;
   }
 
-  async GetUsers(): Promise<Entities.User[] | undefined> {
-    this.logger.info('Db.GetUsers');
+  async GetUsers(filters: Partial<Entities.FilterUser>): Promise<Entities.User[] | undefined> {
+    this.logger.info('Db.ManagerGetUser', filters);
 
     const knexdb = this.GetKnex();
 
@@ -181,6 +181,17 @@ export class ManagerDatabase {
         .leftJoin('bikeDetails', 'bookingDates.bikeId', 'bikeDetails.id')
         .whereNot({ 'users.email': 'admin@bikerental.app' })
         .groupBy('users.id');
+
+      // Apply filters
+      if (filters.userName) {
+        query.where('users.userName', 'like', `%${filters.userName}%`);
+      }
+      if (filters.email) {
+        query.where('users.email', 'like', `%${filters.email}%`);
+      }
+      if (filters.type) {
+        query.where('users.type', filters.type);
+      }
 
       const { res, err } = await this.RunQuery(query);
 
