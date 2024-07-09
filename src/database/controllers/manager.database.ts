@@ -100,23 +100,47 @@ export class ManagerDatabase {
     }
   }
   async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
-    this.logger.info('Db.UpdateBike');
+    this.logger.info('Db.GetBikes');
 
     const knexdb = this.GetKnex();
 
-    const query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
+    const query = knexdb('bikeDetails')
+      .leftJoin('bookingDates', 'bikeDetails.id', 'bookingDates.bikeId')
+      .leftJoin('users', 'bookingDates.userId', 'users.id')
+      .select(
+        'bikeDetails.*',
+        knexdb.raw('5 as "averageRating"'),
+        knexdb.raw(`
+          json_agg(
+            json_build_object(
+              'name', "users"."userName",
+              'email', "users"."email",
+              'type', "users"."type",
+              'startDate', "bookingDates"."startDate",
+              'endDate', "bookingDates"."endDate",
+              'rating', "bookingDates"."rating"
+            )
+          ) as reservations
+        `),
+      )
+      .groupBy('bikeDetails.id');
 
     const { res, err } = await this.RunQuery(query);
+
+    this.logger.info(res, 'Fetched Bike Details');
 
     if (res?.length === 0) {
       return undefined;
     }
 
     if (err) {
-      this.logger.error('Db.UpdateBike');
+      this.logger.error('Db.GetBikes');
+      return undefined;
     }
+
     return res;
   }
+
   async GetUsers(): Promise<Entities.User[] | undefined> {
     this.logger.info('Db.GetUsers');
 
