@@ -88,18 +88,22 @@ export class UserDatabase {
       throw new AppError(404, 'Update failed');
     }
   }
-  async GetBikes(data: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
+  async GetBikes(where: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
     this.logger.info('Db.UpdateBike');
+    const { startDate, endDate, ...data } = where;
 
     const knexdb = this.GetKnex();
 
-    let query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
-    if (data.location) {
-      query = query.where({ 'bikeDetails.location': data.location });
-    }
-    if (data.model) {
-      query = query.where({ 'bikeDetails.bikeModel': parseInt(data.model) });
-    }
+    const query = knexdb('bikeDetails')
+      .select('bikeDetails.*', knexdb.raw('COALESCE(AVG(bookingDates.rating), 0) as "averageRating"'))
+      .leftJoin('bookingDates', 'bikeDetails.id', 'bookingDates.bikeId')
+      .where(data)
+      .where(function () {
+        if (startDate && endDate) {
+          this.where('bookingDates.startDate', '>', endDate).orWhere('bookingDates.endDate', '<', startDate);
+        }
+      })
+      .groupBy('bikeDetails.id');
 
     const { res, err } = await this.RunQuery(query);
 
@@ -108,10 +112,13 @@ export class UserDatabase {
     }
 
     if (err) {
-      this.logger.error('Db.UpdateBike');
+      this.logger.error('Db.UpdateBike', err);
+      throw new Error('Error executing query');
     }
+
     return res;
   }
+
   async ReservedBike(bikeData: Partial<Entities.BookingDates>): Promise<string> {
     this.logger.info('Db.ReservedBike', { bikeData });
 

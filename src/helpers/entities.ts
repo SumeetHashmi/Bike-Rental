@@ -14,8 +14,11 @@ export interface User {
 }
 
 export interface QueryData {
-  model?: string;
+  bikeModel?: string;
   location?: string;
+  bikeColor?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface BikeDetails {
