@@ -44,31 +44,8 @@ export class ManagerService {
     Logger.info('Manager.UpdateBike');
 
     const BikesData = await this.db.Manager.GetBikes();
-    let updatedBikesData;
-    if (BikesData) {
-      const reservationData = [
-        {
-          name: 'Jane Smith',
-          email: 'jane@example.com',
-          type: 'user',
-          startDate: '2024-06-25T14:00:00',
-          endDate: '2024-06-26T14:00:00',
-        },
-        {
-          name: 'Local Smith',
-          email: 'local@example.com',
-          type: 'user',
-          startDate: '2024-06-25T14:00:00',
-          endDate: '2024-06-26T14:00:00',
-        },
-      ];
 
-      updatedBikesData = BikesData.map((bike) => ({ ...bike, reservation: reservationData }));
-    } else {
-      Logger.info('BikeData is undefined');
-    }
-
-    return updatedBikesData;
+    return BikesData;
   }
 
   public async GetUsers(): Promise<Entities.User[] | undefined> {
