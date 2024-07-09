@@ -88,18 +88,22 @@ export class UserDatabase {
       throw new AppError(404, 'Update failed');
     }
   }
-  async GetBikes(data: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
+  async GetBikes(where: Entities.QueryData): Promise<Entities.BikeDetails[] | undefined> {
     this.logger.info('Db.UpdateBike');
+    const { startDate, endDate, ...data } = where;
 
     const knexdb = this.GetKnex();
 
-    let query = knexdb('bikeDetails').select('*', knexdb.raw(`5 as "averageRating"`));
-    if (data.location) {
-      query = query.where({ 'bikeDetails.location': data.location });
-    }
-    if (data.model) {
-      query = query.where({ 'bikeDetails.bikeModel': parseInt(data.model) });
-    }
+    const query = knexdb('bikeDetails')
+      .select('*', knexdb.raw(`5 as "averageRating"`))
+      .leftJoin('bookingDates', 'bikeDetails.id', 'bookingDates.bikeId')
+
+      .where(data)
+      .where(function () {
+        if (startDate && endDate) {
+          this.where('bookingDates.startDate', '>', endDate).orWhere('bookingDates.endDate', '<', startDate);
+        }
+      });
 
     const { res, err } = await this.RunQuery(query);
 

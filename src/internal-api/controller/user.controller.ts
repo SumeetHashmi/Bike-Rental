@@ -38,25 +38,31 @@ export class UserController {
       res.json(body);
     });
 
-    this.router.get('/bikes', async (req: RequestQuery<{ model?: string; location?: string }>, res: Response) => {
-      let body;
-      try {
-        if (!req.userId) throw new AppError(400, 'Unauthorized');
+    this.router.get(
+      '/bikes',
+      async (
+        req: RequestQuery<{ model?: string; location?: string; color: string; startDate: string; endDate: string }>,
+        res: Response,
+      ) => {
+        let body;
+        try {
+          if (!req.userId) throw new AppError(400, 'Unauthorized');
 
-        const db = res.locals.db as Db;
+          const db = res.locals.db as Db;
 
-        const service = new UserService({ db });
+          const service = new UserService({ db });
 
-        const bikeDetails = await service.GetBikes(req.query);
+          const bikeDetails = await service.GetBikes(req.query);
 
-        body = {
-          data: bikeDetails,
-        };
-      } catch (error) {
-        genericError(error, res);
-      }
-      res.json(body);
-    });
+          body = {
+            data: bikeDetails,
+          };
+        } catch (error) {
+          genericError(error, res);
+        }
+        res.json(body);
+      },
+    );
 
     this.router.post('/reserved-bikes', async (req: RequestBody<UserModel.BikeReservationModel>, res: Response) => {
       let body;
