@@ -99,7 +99,8 @@ export class ManagerDatabase {
       throw new AppError(400, `Bike not deleted`);
     }
   }
-  async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
+
+  async GetBikes(filters: Partial<Entities.BikeDetails>): Promise<Entities.BikeDetails[] | undefined> {
     this.logger.info('Db.GetBikes');
 
     const knexdb = this.GetKnex();
@@ -124,6 +125,17 @@ export class ManagerDatabase {
         `),
       )
       .groupBy('bikeDetails.id');
+
+    // Apply filters
+    if (filters.bikeModel) {
+      query.where('bikeModel', filters.bikeModel);
+    }
+    if (filters.bikeColor) {
+      query.where('bikeColor', filters.bikeColor);
+    }
+    if (filters.location) {
+      query.where('location', filters.location);
+    }
 
     const { res, err } = await this.RunQuery(query);
 

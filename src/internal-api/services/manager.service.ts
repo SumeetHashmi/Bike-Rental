@@ -40,10 +40,10 @@ export class ManagerService {
     await this.db.Manager.DeleteBike({ id });
   }
 
-  public async GetBikes(): Promise<Entities.BikeDetails[] | undefined> {
-    Logger.info('Manager.UpdateBike');
+  public async GetBikes(filters: Partial<Entities.BikeDetails>): Promise<Entities.BikeDetails[] | undefined> {
+    Logger.info('Manager.UpdateBike', filters);
 
-    const BikesData = await this.db.Manager.GetBikes();
+    const BikesData = await this.db.Manager.GetBikes(filters);
 
     return BikesData;
   }
