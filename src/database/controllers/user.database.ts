@@ -101,7 +101,9 @@ export class UserDatabase {
       .where(data)
       .where(function () {
         if (startDate && endDate) {
-          this.where('bookingDates.startDate', '>', endDate).orWhere('bookingDates.endDate', '<', startDate);
+          this.where('bookingDates.startDate', '>', endDate)
+            .orWhere('bookingDates.endDate', '<', startDate)
+            .orWhereNull('bookingDates.startDate');
         }
       });
 
@@ -112,7 +114,7 @@ export class UserDatabase {
     }
 
     if (err) {
-      this.logger.error('Db.UpdateBike');
+      this.logger.error('Db.UpdateBike', err);
     }
     return res;
   }
