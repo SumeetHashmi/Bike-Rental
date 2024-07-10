@@ -39,6 +39,12 @@ export class UserService {
     return BikesData;
   }
   public async ReservedBikes(bikeData: UserModels.BikeReservationModel, userId: string): Promise<void> {
+    const date = new Date();
+
+    if (bikeData.startDate < date.toString() || bikeData.endDate < bikeData.startDate) {
+      throw new AppError(400, 'Please provide valid date ');
+    }
+
     Logger.info('User.CreateUser', { bikeData });
 
     await this.db.User.ReservedBike({ userId, ...bikeData });
