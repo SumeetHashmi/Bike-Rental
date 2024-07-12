@@ -42,7 +42,7 @@ export class UserService {
     const date = new Date();
     Logger.info('User.CreateUser', bikeData.startDate < date.toString(), bikeData.endDate < bikeData.startDate);
 
-    if (bikeData.startDate < date.toISOString() || bikeData.endDate < bikeData.startDate) {
+    if (bikeData.startDate <= date.toISOString() || bikeData.endDate < bikeData.startDate) {
       throw new AppError(400, 'Please provide valid date ');
     }
 
